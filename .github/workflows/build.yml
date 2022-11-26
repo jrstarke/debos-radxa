@@ -8,6 +8,7 @@ on:
       - 'configs/**'
       - 'rootfs/**'
       - 'scripts/**'
+      - '.github/**'
 
 jobs:
   prepare_release:
@@ -47,23 +48,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build image
-        run: |
-          docker run --rm --tty --tmpfs /dev/shm:rw,nosuid,nodev,exec,size=4g --user $(id -u) --security-opt label=disable \
-          --workdir $PWD --mount "type=bind,source=$PWD,destination=$PWD" --entrypoint ./scripts/build-supported-configuration.sh godebos/debos \
-          -b ${{ matrix.BOARD }} -m ${{ matrix.MODEL }} ${{ matrix.VARIANT && format('-v {0}', matrix.VARIANT) }}
-      - name: Upload image
-        uses: xresloader/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_id: ${{ needs.prepare_release.outputs.release_id }}
-          file: ./output/*.img.*
-          draft: false
-      - name: Rollback release
-        if: failure()
-        uses: author/action-rollback@stable
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_id: ${{ needs.prepare_release.outputs.release_id }}
+#      - name: Build image
+#        run: |
+#          docker run --rm --tty --tmpfs /dev/shm:rw,nosuid,nodev,exec,size=4g --user $(id -u) --security-opt label=disable \
+#          --workdir $PWD --mount "type=bind,source=$PWD,destination=$PWD" --entrypoint ./scripts/build-supported-configuration.sh godebos/debos \
+#          -b ${{ matrix.BOARD }} -m ${{ matrix.MODEL }} ${{ matrix.VARIANT && format('-v {0}', matrix.VARIANT) }}
+#      - name: Upload image
+#        uses: xresloader/upload-to-github-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          release_id: ${{ needs.prepare_release.outputs.release_id }}
+#          file: ./output/*.img.*
+#          draft: false
+#      - name: Rollback release
+#        if: failure()
+#        uses: author/action-rollback@stable
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          release_id: ${{ needs.prepare_release.outputs.release_id }}
