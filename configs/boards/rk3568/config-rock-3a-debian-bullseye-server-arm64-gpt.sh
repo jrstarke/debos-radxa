@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 CMD=`realpath $0`
 CONFIG_BOARD_DIR=`dirname $CMD`
@@ -18,7 +19,7 @@ export FORMAT=gpt
 export IMAGESIZE=4000MB
 
 # Add pre-installed packages for target system
-cat > $BUILD_DIR/${BOARD}-${MODEL}-${DISTRO}-${VARIANT}-${ARCH}-${FORMAT}-packages.list <<EOF
+cat > "$BUILD_DIR/${BOARD}-${MODEL}-${DISTRO}-${VARIANT}-${ARCH}-${FORMAT}-packages.list" <<EOF
 
 EOF
 
